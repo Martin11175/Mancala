@@ -12,7 +12,7 @@
  * DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package io.mh175.mancala;
+package io.mrtn175.mancala;
 
 import android.app.Activity;
 import android.os.Bundle;

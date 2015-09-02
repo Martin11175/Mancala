@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "io.mh175.mancala"
+        applicationId "io.mrtn175.mancala"
         minSdkVersion 19
         targetSdkVersion 22
         versionCode 1

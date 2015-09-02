@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.mh175.mancala" >
+    package="io.mrtn175.mancala" >
 
     <application
         android:allowBackup="true"
