@@ -27,6 +27,7 @@ public class MenuActivity extends Activity {
 
     /**
      * Initialises the menu view on activity creation.
+     *
      * @param savedInstanceState Saved state from previous onDestroy call.
      */
     @Override
@@ -37,6 +38,7 @@ public class MenuActivity extends Activity {
 
     /**
      * Called when the user presses the New Game button to initialise a new GameActivity.
+     *
      * @param view The view from which the call was made.
      */
     public void newGame(View view) {

@@ -31,6 +31,7 @@ public class GameActivity extends Activity {
 
     /**
      * Setup view on activity creation.
+     *
      * @param savedInstanceState Bundle saved from a previous onDestroy.
      */
     @Override
@@ -47,6 +48,7 @@ public class GameActivity extends Activity {
 
     /**
      * Handler called when window focus changes to or away from this activity.
+     *
      * @param hasFocus Whether this boolean has received focus or not.
      */
     @Override
@@ -56,15 +58,17 @@ public class GameActivity extends Activity {
         if (hasFocus) {
             this.getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
     }
 
     /**
      * Handler called when an actionable (non-scoring) pot is clicked.
+     *
      * @param pot The view that was interacted with (enables us to identify the pot).
      */
     public void potClick(View pot) {
@@ -120,17 +124,17 @@ public class GameActivity extends Activity {
             default: // Again, this is top-level, so must be logged
                 Log.e(getResources().getText(R.string.app_name).toString(),
                         "Unknown game state entered");
-                return;
         }
     }
 
     /**
      * Private helper function for displaying which player's turn it is.
+     *
      * @param player True for player 1, false for player 2.
      */
     private void setTurn(boolean player) {
         // Disable / Re-enable the opponent's / player's buttons respectively
-        if(player) {
+        if (player) {
             this.findViewById(R.id.pot_1_1).setClickable(true);
             this.findViewById(R.id.pot_1_2).setClickable(true);
             this.findViewById(R.id.pot_1_3).setClickable(true);

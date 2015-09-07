@@ -118,16 +118,16 @@ public class GameSpace {
 
         // Check to see if the opponent can make a move in the next turn
         boolean opponentCanMove = false;
-        if(playerTurn) {
-            for(int i = 1; i < NUM_POTS; i++) {
-                if(player2Pots[i] != 0) {
+        if (playerTurn) {
+            for (int i = 1; i < NUM_POTS; i++) {
+                if (player2Pots[i] != 0) {
                     opponentCanMove = true;
                     break;
                 }
             }
         } else {
-            for(int i = 1; i < NUM_POTS; i++) {
-                if(player1Pots[i] != 0) {
+            for (int i = 1; i < NUM_POTS; i++) {
+                if (player1Pots[i] != 0) {
                     opponentCanMove = true;
                     break;
                 }
@@ -135,30 +135,30 @@ public class GameSpace {
         }
 
         // If not they have been "starved out" so the player collects all of their beans
-        if(!opponentCanMove && playerTurn) {
-            for(int i = 1; i < NUM_POTS; i++) {
+        if (!opponentCanMove && playerTurn) {
+            for (int i = 1; i < NUM_POTS; i++) {
                 player1Pots[0] += player1Pots[i];
                 player1Pots[i] = 0;
             }
         } else if (!opponentCanMove) {
-            for(int i = 1; i < NUM_POTS; i++) {
+            for (int i = 1; i < NUM_POTS; i++) {
                 player2Pots[0] += player2Pots[i];
                 player2Pots[i] = 0;
             }
         }
 
         // If either player holds more than half of the total beans on the board, they've won
-        if(player1Pots[0] > (totalBeans / 2))
+        if (player1Pots[0] > (totalBeans / 2))
             return GameState.PLAYER_1_WIN;
         else if (player2Pots[0] > (totalBeans / 2))
             return GameState.PLAYER_2_WIN;
         else if ((player1Pots[0] == (totalBeans / 2))
-            && (player2Pots[0] == (totalBeans / 2)))
+                && (player2Pots[0] == (totalBeans / 2)))
             return GameState.TIE;
         // If a player's move finishes in their scoring pot, they may take again
-        else if(potNum == 0)
+        else if (potNum == 0)
             return playerTurn ? GameState.PLAYER_1_TURN : GameState.PLAYER_2_TURN;
-        // Otherwise, just swap players as normal
+            // Otherwise, just swap players as normal
         else {
             playerTurn ^= true;
             return playerTurn ? GameState.PLAYER_1_TURN : GameState.PLAYER_2_TURN;
