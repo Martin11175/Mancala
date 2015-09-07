@@ -1,38 +1,48 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:background="@color/white"
-    tools:context="io.mrtn175.mancala.GameActivity">
+    tools:context="io.mrtn175.mancala.GameActivity"
+    android:nestedScrollingEnabled="false"
+    android:onClick="potClick">
 
     <!-- Player 1 -->
     <TextView android:id="@+id/pot_1_0"
-        android:text="Player 1 Pot 0"
         style="@style/Total"
+        android:text="Player 1 Pot 0"
         android:layout_alignParentEnd="true"/>
 
     <Button android:id="@+id/pot_1_1"
         style="@style/Player1Pot"
         android:text="Player 1 Pot 1"
-        android:layout_toStartOf="@+id/pot_1_0"/>
+        android:layout_toStartOf="@+id/pot_1_0"
+        android:nestedScrollingEnabled="false"
+        android:onClick="potClick" />
 
     <Button android:id="@+id/pot_1_2"
         style="@style/Player1Pot"
         android:text="Player 1 Pot 2"
-        android:layout_toStartOf="@+id/pot_1_1"/>
+        android:layout_toStartOf="@+id/pot_1_1"
+        android:nestedScrollingEnabled="false"
+        android:onClick="potClick" />
 
     <Button android:id="@+id/pot_1_3"
         style="@style/Player1Pot"
         android:text="Player 1 Pot 3"
-        android:layout_toStartOf="@+id/pot_1_2"/>
+        android:layout_toStartOf="@+id/pot_1_2"
+        android:nestedScrollingEnabled="false"
+        android:onClick="potClick" />
 
     <Button android:id="@+id/pot_1_4"
         style="@style/Player1Pot"
         android:text="Player 1 Pot 4"
-        android:layout_toStartOf="@+id/pot_1_3"/>
+        android:layout_toStartOf="@+id/pot_1_3"
+        android:onClick="potClick" />
 
     <Button android:id="@+id/pot_1_5"
         style="@style/Player1Pot"
         android:text="Player 1 Pot 5"
-        android:layout_toStartOf="@+id/pot_1_4"/>
+        android:layout_toStartOf="@+id/pot_1_4"
+        android:onClick="potClick" />
 
     <Button android:id="@+id/pot_1_6"
         style="@style/Player1Pot"
@@ -41,38 +51,50 @@
 
     <!-- Player 2 -->
     <TextView android:id="@+id/pot_2_0"
-        android:text="Player 2 Pot 0"
         style="@style/Total"
+        android:text="Player 2 Pot 0"
         android:layout_alignParentStart="true"/>
 
     <Button android:id="@+id/pot_2_1"
         style="@style/Player2Pot"
         android:text="Player 2 Pot 1"
-        android:layout_toEndOf="@+id/pot_2_0"/>
+        android:layout_toEndOf="@+id/pot_2_0"
+        android:nestedScrollingEnabled="false"
+        android:onClick="potClick" />
 
     <Button android:id="@+id/pot_2_2"
         style="@style/Player2Pot"
         android:text="Player 2 Pot 2"
-        android:layout_toEndOf="@+id/pot_2_1"/>
+        android:layout_toEndOf="@+id/pot_2_1"
+        android:nestedScrollingEnabled="false"
+        android:onClick="potClick" />
 
     <Button android:id="@+id/pot_2_3"
         style="@style/Player2Pot"
         android:text="Player 2 Pot 3"
-        android:layout_toEndOf="@+id/pot_2_2"/>
+        android:layout_toEndOf="@+id/pot_2_2"
+        android:nestedScrollingEnabled="false"
+        android:onClick="potClick" />
 
     <Button android:id="@+id/pot_2_4"
         style="@style/Player2Pot"
         android:text="Player 2 Pot 4"
-        android:layout_toEndOf="@+id/pot_2_3"/>
+        android:layout_toEndOf="@+id/pot_2_3"
+        android:nestedScrollingEnabled="false"
+        android:onClick="potClick" />
 
     <Button android:id="@+id/pot_2_5"
         style="@style/Player2Pot"
         android:text="Player 2 Pot 5"
-        android:layout_toEndOf="@+id/pot_2_4"/>
+        android:layout_toEndOf="@+id/pot_2_4"
+        android:nestedScrollingEnabled="false"
+        android:onClick="potClick" />
 
     <Button android:id="@+id/pot_2_6"
         style="@style/Player2Pot"
         android:text="Player 2 Pot 6"
-        android:layout_toEndOf="@+id/pot_2_5"/>
+        android:layout_toEndOf="@+id/pot_2_5"
+        android:nestedScrollingEnabled="false"
+        android:onClick="potClick" />
 
 </RelativeLayout>
