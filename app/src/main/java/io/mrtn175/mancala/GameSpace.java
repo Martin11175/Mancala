@@ -107,13 +107,15 @@ public class GameSpace {
             if (playerTurn) {
                 player1Pots[0] += player1Pots[potNum];
                 player1Pots[0] += player2Pots[NUM_POTS - potNum];
+                player1Pots[potNum] = 0;
+                player2Pots[NUM_POTS - potNum] = 0;
             } else {
                 player2Pots[0] += player1Pots[NUM_POTS - potNum];
                 player2Pots[0] += player2Pots[potNum];
+                player1Pots[NUM_POTS - potNum] = 0;
+                player2Pots[potNum] = 0;
             }
 
-            player1Pots[potNum] = 0;
-            player2Pots[potNum] = 0;
         }
 
         // Check to see if the opponent can make a move in the next turn
@@ -163,5 +165,15 @@ public class GameSpace {
             playerTurn ^= true;
             return playerTurn ? GameState.PLAYER_1_TURN : GameState.PLAYER_2_TURN;
         }
+    }
+
+    /**
+     * Retrieve the current distribution of beans over a player's pots.
+     *
+     * @param player The player for whom to request the pots for (true for P1, false for P2)
+     * @return An array of the requested player's pots where index 0 is the scoring pot.
+     */
+    public int[] getBeans(boolean player) {
+        return player ? player1Pots : player2Pots;
     }
 }

@@ -47,7 +47,8 @@
     <Button android:id="@+id/pot_1_6"
         style="@style/Player1Pot"
         android:text="Player 1 Pot 6"
-        android:layout_toStartOf="@+id/pot_1_5"/>
+        android:layout_toStartOf="@+id/pot_1_5"
+        android:onClick="potClick" />
 
     <!-- Player 2 -->
     <TextView android:id="@+id/pot_2_0"

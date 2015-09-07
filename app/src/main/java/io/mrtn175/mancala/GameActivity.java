@@ -18,13 +18,20 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Game activity handling interation with the user.
  */
 // TODO: Replace all boolean player / side representations with enums for readability
 public class GameActivity extends Activity {
-    GameSpace game; // The game's current state.
+    GameSpace game; // The game's current state
+    // Collections of player's pots (index 0 being the scoring pot)
+    List<View> player1Pots, player2Pots;
 
     // Default number of beans per pot for a game of Mancala
     public static final int DEFAULT_BEANS = 4;
@@ -39,11 +46,31 @@ public class GameActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        // Store arrays of pots for manipulation through iteration
+        player1Pots = new ArrayList<View>();
+        player1Pots.add(findViewById(R.id.pot_1_0));
+        player1Pots.add(findViewById(R.id.pot_1_1));
+        player1Pots.add(findViewById(R.id.pot_1_2));
+        player1Pots.add(findViewById(R.id.pot_1_3));
+        player1Pots.add(findViewById(R.id.pot_1_4));
+        player1Pots.add(findViewById(R.id.pot_1_5));
+        player1Pots.add(findViewById(R.id.pot_1_6));
+
+        player2Pots = new ArrayList<View>();
+        player2Pots.add(findViewById(R.id.pot_2_0));
+        player2Pots.add(findViewById(R.id.pot_2_1));
+        player2Pots.add(findViewById(R.id.pot_2_2));
+        player2Pots.add(findViewById(R.id.pot_2_3));
+        player2Pots.add(findViewById(R.id.pot_2_4));
+        player2Pots.add(findViewById(R.id.pot_2_5));
+        player2Pots.add(findViewById(R.id.pot_2_6));
+
         //TODO: Allow save and return through onClose / onDestroy
         game = new GameSpace(DEFAULT_BEANS);
 
         // TODO: Randomise starting player
         setTurn(true);
+        updateBoard();
     }
 
     /**
@@ -72,53 +99,37 @@ public class GameActivity extends Activity {
      * @param pot The view that was interacted with (enables us to identify the pot).
      */
     public void potClick(View pot) {
-        GameSpace.GameState state;
+        int potNum;
 
         // Identify the pot number clicked and inform the game state of the move
-        switch (pot.getId()) {
-            case R.id.pot_1_1:
-            case R.id.pot_2_1:
-                state = game.makeMove(1);
-                break;
-            case R.id.pot_1_2:
-            case R.id.pot_2_2:
-                state = game.makeMove(2);
-                break;
-            case R.id.pot_1_3:
-            case R.id.pot_2_3:
-                state = game.makeMove(3);
-                break;
-            case R.id.pot_1_4:
-            case R.id.pot_2_4:
-                state = game.makeMove(4);
-                break;
-            case R.id.pot_1_5:
-            case R.id.pot_2_5:
-                state = game.makeMove(5);
-                break;
-            case R.id.pot_1_6:
-            case R.id.pot_2_6:
-                state = game.makeMove(6);
-                break;
-            default: // Top-level activity, so don't throw an exception, but it should be logged
-                Log.w(getResources().getText(R.string.app_name).toString(),
-                        "Unauthorised object attempting to call GameActivity.potClick");
-                return;
+        if (player1Pots.indexOf(pot) != -1) {
+            potNum = player1Pots.indexOf(pot);
+        } else if (player2Pots.indexOf(pot) != -1) {
+            potNum = player2Pots.indexOf(pot);
+        } else {
+            // Top-level activity, so don't throw an exception, but it should be logged
+            Log.w(getResources().getText(R.string.app_name).toString(),
+                    "Unauthorised object attempting to call GameActivity.potClick");
+            return;
         }
 
         // Process the response from the underlying game state
-        switch (state) {
-            // TODO: Fill out how to handle a game ending
+        switch (game.makeMove(potNum)) {
             case PLAYER_1_WIN:
+                Toast.makeText(this, "Player 1 Wins!", Toast.LENGTH_LONG).show();
                 break;
             case PLAYER_2_WIN:
+                Toast.makeText(this, "Player 2 Wins!", Toast.LENGTH_LONG).show();
                 break;
             case TIE:
+                Toast.makeText(this, "Tie!", Toast.LENGTH_LONG).show();
                 break;
             case PLAYER_1_TURN:
+                updateBoard();
                 setTurn(true);
                 break;
             case PLAYER_2_TURN:
+                updateBoard();
                 setTurn(false);
                 break;
             default: // Again, this is top-level, so must be logged
@@ -134,32 +145,9 @@ public class GameActivity extends Activity {
      */
     private void setTurn(boolean player) {
         // Disable / Re-enable the opponent's / player's buttons respectively
-        if (player) {
-            this.findViewById(R.id.pot_1_1).setClickable(true);
-            this.findViewById(R.id.pot_1_2).setClickable(true);
-            this.findViewById(R.id.pot_1_3).setClickable(true);
-            this.findViewById(R.id.pot_1_4).setClickable(true);
-            this.findViewById(R.id.pot_1_5).setClickable(true);
-            this.findViewById(R.id.pot_1_6).setClickable(true);
-            this.findViewById(R.id.pot_2_1).setClickable(false);
-            this.findViewById(R.id.pot_2_2).setClickable(false);
-            this.findViewById(R.id.pot_2_3).setClickable(false);
-            this.findViewById(R.id.pot_2_4).setClickable(false);
-            this.findViewById(R.id.pot_2_5).setClickable(false);
-            this.findViewById(R.id.pot_2_6).setClickable(false);
-        } else {
-            this.findViewById(R.id.pot_1_1).setClickable(false);
-            this.findViewById(R.id.pot_1_2).setClickable(false);
-            this.findViewById(R.id.pot_1_3).setClickable(false);
-            this.findViewById(R.id.pot_1_4).setClickable(false);
-            this.findViewById(R.id.pot_1_5).setClickable(false);
-            this.findViewById(R.id.pot_1_6).setClickable(false);
-            this.findViewById(R.id.pot_2_1).setClickable(true);
-            this.findViewById(R.id.pot_2_2).setClickable(true);
-            this.findViewById(R.id.pot_2_3).setClickable(true);
-            this.findViewById(R.id.pot_2_4).setClickable(true);
-            this.findViewById(R.id.pot_2_5).setClickable(true);
-            this.findViewById(R.id.pot_2_6).setClickable(true);
+        for(int i = 1; i < GameSpace.NUM_POTS; i++) {
+            player1Pots.get(i).setClickable(player);
+            player2Pots.get(i).setClickable(!player);
         }
     }
 
@@ -167,6 +155,13 @@ public class GameActivity extends Activity {
      * Update the UI to represent the new game state.
      */
     private void updateBoard() {
-        // TODO: Tie together underlying game state and UI
+        int[] player1Beans = game.getBeans(true);
+        int[] player2Beans = game.getBeans(false);
+
+        // Iterate through the pots and update their displayed values
+        for(int i = 0; i < player1Pots.size(); i++) {
+            ((TextView) player1Pots.get(i)).setText(Integer.toString(player1Beans[i]));
+            ((TextView) player2Pots.get(i)).setText(Integer.toString(player2Beans[i]));
+        }
     }
 }
