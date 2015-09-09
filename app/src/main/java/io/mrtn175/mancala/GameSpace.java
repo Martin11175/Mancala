@@ -20,11 +20,17 @@ package io.mrtn175.mancala;
 public class GameSpace {
     // Current game state
     int[] player1Pots, player2Pots;
-    boolean playerTurn; // True for player1, false for player2
+    Player playerTurn; // True for player1, false for player2
     int totalBeans; // Total number of beans on the board
 
+    // Enumeration of potential states to finish a move in
     public enum GameState {
         PLAYER_1_TURN, PLAYER_2_TURN, PLAYER_1_WIN, PLAYER_2_WIN, TIE
+    }
+
+    // Enumeration of players for readability
+    public enum Player {
+        P1, P2
     }
 
     // Number of pots per side (including scoring pots) in a standard game of Mancala
@@ -34,11 +40,12 @@ public class GameSpace {
      * Constructor for a new game.
      *
      * @param initBeans The number of starting beans per pot.
+     * @param startingPlayer The player to make the first move.
      */
-    public GameSpace(int initBeans) {
+    public GameSpace(int initBeans, Player startingPlayer) {
         player1Pots = new int[NUM_POTS];
         player2Pots = new int[NUM_POTS];
-        playerTurn = true;
+        playerTurn = startingPlayer;
 
         // SPILL THE BEANS
         for (int i = 1; i < NUM_POTS; i++) {
@@ -60,11 +67,11 @@ public class GameSpace {
     // TODO: Split into independent chunks
     public GameState makeMove(int potNum) {
         // The side of the board we're currently looking at (true for P1, false for P2)
-        boolean boardSide = playerTurn;
+        Player boardSide = playerTurn;
         int beansInHand;
 
         // Draw beans from the respective pot
-        if (boardSide) {
+        if (boardSide == Player.P1) {
             beansInHand = player1Pots[potNum];
             player1Pots[potNum] = 0;
         } else {
@@ -79,15 +86,15 @@ public class GameSpace {
             // Disallow placing in the opponent's scoring pot
             if (potNum == 0 && boardSide != playerTurn) {
                 potNum = NUM_POTS - 1;
-                boardSide ^= true;
+                boardSide = nextPlayer(boardSide);
             }
             // Loop to other side after placing in scoring pot
             else if (potNum < 0) {
                 potNum = NUM_POTS - 1;
-                boardSide ^= true;
+                boardSide = nextPlayer(boardSide);
             }
 
-            if (boardSide)
+            if (boardSide == Player.P1)
                 player1Pots[potNum]++;
             else
                 player2Pots[potNum]++;
@@ -97,14 +104,14 @@ public class GameSpace {
         // Check if the final placement was in an empty pot on the player's side
         if (boardSide == playerTurn
                 && potNum != 0
-                && ((boardSide && player1Pots[potNum] == 1)
+                && ((boardSide == Player.P1 && player1Pots[potNum] == 1)
                 || player2Pots[potNum] == 1)) {
 
             /*
              * If so the player takes both the last bean they placed in that pot and
              * all the beans in the pot opposite
              */
-            if (playerTurn) {
+            if (playerTurn == Player.P1) {
                 player1Pots[0] += player1Pots[potNum];
                 player1Pots[0] += player2Pots[NUM_POTS - potNum];
                 player1Pots[potNum] = 0;
@@ -120,7 +127,7 @@ public class GameSpace {
 
         // Check to see if the opponent can make a move in the next turn
         boolean opponentCanMove = false;
-        if (playerTurn) {
+        if (playerTurn == Player.P1) {
             for (int i = 1; i < NUM_POTS; i++) {
                 if (player2Pots[i] != 0) {
                     opponentCanMove = true;
@@ -137,7 +144,7 @@ public class GameSpace {
         }
 
         // If not they have been "starved out" so the player collects all of their beans
-        if (!opponentCanMove && playerTurn) {
+        if (!opponentCanMove && playerTurn == Player.P1) {
             for (int i = 1; i < NUM_POTS; i++) {
                 player1Pots[0] += player1Pots[i];
                 player1Pots[i] = 0;
@@ -157,13 +164,11 @@ public class GameSpace {
         else if ((player1Pots[0] == (totalBeans / 2))
                 && (player2Pots[0] == (totalBeans / 2)))
             return GameState.TIE;
-        // If a player's move finishes in their scoring pot, they may take again
-        else if (potNum == 0)
-            return playerTurn ? GameState.PLAYER_1_TURN : GameState.PLAYER_2_TURN;
-            // Otherwise, just swap players as normal
         else {
-            playerTurn ^= true;
-            return playerTurn ? GameState.PLAYER_1_TURN : GameState.PLAYER_2_TURN;
+            // If a player's move finishes in their scoring pot, they may take again
+            if (potNum != 0)
+                playerTurn = nextPlayer(playerTurn);
+            return playerTurn == Player.P1 ? GameState.PLAYER_1_TURN : GameState.PLAYER_2_TURN;
         }
     }
 
@@ -173,7 +178,17 @@ public class GameSpace {
      * @param player The player for whom to request the pots for (true for P1, false for P2)
      * @return An array of the requested player's pots where index 0 is the scoring pot.
      */
-    public int[] getBeans(boolean player) {
-        return player ? player1Pots : player2Pots;
+    public int[] getBeans(Player player) {
+        return player == Player.P1 ? player1Pots : player2Pots;
+    }
+
+    /**
+     * Private helper for getting the next player (easier to read than the triple).
+     *
+     * @param currentPlayer The current player.
+     * @return Player 2 if Player 1 was passed, Player 1 otherwise.
+     */
+    private Player nextPlayer(Player currentPlayer) {
+        return currentPlayer == Player.P1 ? Player.P2 : Player.P1;
     }
 }

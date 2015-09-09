@@ -27,7 +27,6 @@ import java.util.ArrayList;
 /**
  * Game activity handling interation with the user.
  */
-// TODO: Replace all boolean player / side representations with enums for readability
 public class GameActivity extends Activity {
     GameSpace game; // The game's current state
     // Collections of player's pots (index 0 being the scoring pot)
@@ -66,11 +65,10 @@ public class GameActivity extends Activity {
         player2Pots.add(findViewById(R.id.pot_2_6));
 
         //TODO: Allow save and return through onClose / onDestroy
-        game = new GameSpace(DEFAULT_BEANS);
+        game = new GameSpace(DEFAULT_BEANS, GameSpace.Player.P1);
 
         // TODO: Randomise starting player
-        setTurn(true);
-        updateBoard();
+        updateBoard(GameSpace.Player.P1);
     }
 
     /**
@@ -125,12 +123,10 @@ public class GameActivity extends Activity {
                 Toast.makeText(this, "Tie!", Toast.LENGTH_LONG).show();
                 break;
             case PLAYER_1_TURN:
-                updateBoard();
-                setTurn(true);
+                updateBoard(GameSpace.Player.P1);
                 break;
             case PLAYER_2_TURN:
-                updateBoard();
-                setTurn(false);
+                updateBoard(GameSpace.Player.P2);
                 break;
             default: // Again, this is top-level, so must be logged
                 Log.e(getResources().getText(R.string.app_name).toString(),
@@ -139,29 +135,25 @@ public class GameActivity extends Activity {
     }
 
     /**
-     * Private helper function for displaying which player's turn it is.
+     * Update the UI to represent the new game state.
      *
      * @param player True for player 1, false for player 2.
      */
-    private void setTurn(boolean player) {
-        // Disable / Re-enable the opponent's / player's buttons respectively
-        for(int i = 1; i < GameSpace.NUM_POTS; i++) {
-            player1Pots.get(i).setClickable(player);
-            player2Pots.get(i).setClickable(!player);
-        }
-    }
-
-    /**
-     * Update the UI to represent the new game state.
-     */
-    private void updateBoard() {
-        int[] player1Beans = game.getBeans(true);
-        int[] player2Beans = game.getBeans(false);
+    private void updateBoard(GameSpace.Player player) {
+        int[] player1Beans = game.getBeans(GameSpace.Player.P1);
+        int[] player2Beans = game.getBeans(GameSpace.Player.P2);
 
         // Iterate through the pots and update their displayed values
         for(int i = 0; i < player1Pots.size(); i++) {
             ((TextView) player1Pots.get(i)).setText(Integer.toString(player1Beans[i]));
             ((TextView) player2Pots.get(i)).setText(Integer.toString(player2Beans[i]));
+        }
+
+        // Disable / Re-enable the opponent's / player's buttons respectively
+        boolean isPlayer1 = (player == GameSpace.Player.P1);
+        for(int i = 1; i < GameSpace.NUM_POTS; i++) {
+            player1Pots.get(i).setClickable(isPlayer1);
+            player2Pots.get(i).setClickable(!isPlayer1);
         }
     }
 }
