@@ -28,9 +28,9 @@ import java.util.ArrayList;
  * Game activity handling interation with the user.
  */
 public class GameActivity extends Activity {
-    GameSpace game; // The game's current state
+    private GameSpace game; // The game's current state
     // Collections of player's pots (index 0 being the scoring pot)
-    List<View> player1Pots, player2Pots;
+    private List<View> player1Pots, player2Pots;
 
     // Default number of beans per pot for a game of Mancala
     public static final int DEFAULT_BEANS = 4;
@@ -46,23 +46,25 @@ public class GameActivity extends Activity {
         setContentView(R.layout.activity_game);
 
         // Store arrays of pots for manipulation through iteration
-        player1Pots = new ArrayList<View>();
-        player1Pots.add(findViewById(R.id.pot_1_0));
-        player1Pots.add(findViewById(R.id.pot_1_1));
-        player1Pots.add(findViewById(R.id.pot_1_2));
-        player1Pots.add(findViewById(R.id.pot_1_3));
-        player1Pots.add(findViewById(R.id.pot_1_4));
-        player1Pots.add(findViewById(R.id.pot_1_5));
-        player1Pots.add(findViewById(R.id.pot_1_6));
+        player1Pots = new ArrayList<View>() {{
+            add(findViewById(R.id.pot_1_0));
+            add(findViewById(R.id.pot_1_1));
+            add(findViewById(R.id.pot_1_2));
+            add(findViewById(R.id.pot_1_3));
+            add(findViewById(R.id.pot_1_4));
+            add(findViewById(R.id.pot_1_5));
+            add(findViewById(R.id.pot_1_6));
+        }};
 
-        player2Pots = new ArrayList<View>();
-        player2Pots.add(findViewById(R.id.pot_2_0));
-        player2Pots.add(findViewById(R.id.pot_2_1));
-        player2Pots.add(findViewById(R.id.pot_2_2));
-        player2Pots.add(findViewById(R.id.pot_2_3));
-        player2Pots.add(findViewById(R.id.pot_2_4));
-        player2Pots.add(findViewById(R.id.pot_2_5));
-        player2Pots.add(findViewById(R.id.pot_2_6));
+        player2Pots = new ArrayList<View>() {{
+            add(findViewById(R.id.pot_2_0));
+            add(findViewById(R.id.pot_2_1));
+            add(findViewById(R.id.pot_2_2));
+            add(findViewById(R.id.pot_2_3));
+            add(findViewById(R.id.pot_2_4));
+            add(findViewById(R.id.pot_2_5));
+            add(findViewById(R.id.pot_2_6));
+        }};
 
         //TODO: Allow save and return through onClose / onDestroy
         game = new GameSpace(DEFAULT_BEANS, GameSpace.Player.P1);
@@ -140,6 +142,13 @@ public class GameActivity extends Activity {
      * @param player True for player 1, false for player 2.
      */
     private void updateBoard(GameSpace.Player player) {
+        // Disable / Re-enable the opponent's / player's buttons respectively
+        boolean isPlayer1 = (player == GameSpace.Player.P1);
+        for(int i = 1; i < GameSpace.NUM_POTS; i++) {
+            player1Pots.get(i).setEnabled(isPlayer1);
+            player2Pots.get(i).setEnabled(!isPlayer1);
+        }
+
         int[] player1Beans = game.getBeans(GameSpace.Player.P1);
         int[] player2Beans = game.getBeans(GameSpace.Player.P2);
 
@@ -147,13 +156,12 @@ public class GameActivity extends Activity {
         for(int i = 0; i < player1Pots.size(); i++) {
             ((TextView) player1Pots.get(i)).setText(Integer.toString(player1Beans[i]));
             ((TextView) player2Pots.get(i)).setText(Integer.toString(player2Beans[i]));
-        }
 
-        // Disable / Re-enable the opponent's / player's buttons respectively
-        boolean isPlayer1 = (player == GameSpace.Player.P1);
-        for(int i = 1; i < GameSpace.NUM_POTS; i++) {
-            player1Pots.get(i).setClickable(isPlayer1);
-            player2Pots.get(i).setClickable(!isPlayer1);
+            // Disable pots with 0 beans in them
+            if (player1Beans[i] == 0)
+                player1Pots.get(i).setEnabled(false);
+            if (player2Beans[i] == 0)
+                player2Pots.get(i).setEnabled(false);
         }
     }
 }
